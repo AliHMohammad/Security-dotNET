@@ -1,0 +1,6 @@
+@Security_CSharp_HostAddress = http://localhost:5057
+
+GET {{Security_CSharp_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

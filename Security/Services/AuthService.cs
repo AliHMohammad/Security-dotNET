@@ -15,6 +15,7 @@ namespace Security_CSharp.Security.Services
         private readonly IAuthRepository _authRepository;
         private readonly IConfiguration _configuration;
 
+        // Ændre efter behov. Sat til 2 timer.
         private readonly int EXPIRATION_HOURS = 2;
 
         public AuthService(IAuthRepository authRepository, IConfiguration configuration)
@@ -59,7 +60,11 @@ namespace Security_CSharp.Security.Services
         {
             List<Claim> claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Name, user.Username)
+                new Claim("iss", "almo.kea"),
+                new Claim("sub", user.Username),
+                new Claim("mail", user.Email),
+                // new Claim("roles", ROLLER)
+                new Claim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
             };
 
 

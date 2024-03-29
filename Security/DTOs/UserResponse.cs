@@ -2,8 +2,8 @@
 {
     public record UserResponse(
             string Username,
-            // List<string> Roles,
-            string Email
+            string Email,
+            List<string> Roles
         );
 
 }

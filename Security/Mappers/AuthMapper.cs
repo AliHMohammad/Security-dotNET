@@ -10,7 +10,8 @@ namespace Security_CSharp.Security.Mappers
         {
             return new UserResponse(
                     user.Username,
-                    user.Email
+                    user.Email,
+                    user.Roles.Select(r => r.Name).ToList()
                 );
         }
 

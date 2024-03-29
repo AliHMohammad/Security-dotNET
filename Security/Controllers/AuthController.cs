@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Security_CSharp.Security.DTOs;
-using Security_CSharp.Security.Entitites;
 using Security_CSharp.Security.Interfaces;
 
 namespace Security_CSharp.Security.Controllers
@@ -18,7 +17,7 @@ namespace Security_CSharp.Security.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<ActionResult<User>> Register(SignupRequest request)
+        public async Task<ActionResult<UserResponse>> Register(SignupRequest request)
         {
             return Ok(await _authService.register(request));
         }

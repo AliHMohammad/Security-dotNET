@@ -15,5 +15,7 @@ namespace Security_CSharp.Security.Entitites
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
+
+        public ICollection<Role> Roles { get; set; } = new List<Role>();
     }
 }

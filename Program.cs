@@ -17,6 +17,7 @@ builder.Services.AddControllers();
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
+builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 // Tilføj Custom Exceptionhandlers
 builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();

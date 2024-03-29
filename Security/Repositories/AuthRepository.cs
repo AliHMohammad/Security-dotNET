@@ -16,12 +16,16 @@ namespace Security_CSharp.Security.Repositories
 
         public async Task<User?> GetUserByUsername(string username)
         {
-            return await _dataContext.Users.FindAsync(username);
+            return await _dataContext.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Username == username);
         }
 
         public async Task<User?> GetUserByEmail(string email)
         {
-            return await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _dataContext.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> CreateUser(User user)

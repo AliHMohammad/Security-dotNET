@@ -7,6 +7,7 @@ namespace Security_CSharp.Data
     {
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
 
 
         public DataContext(DbContextOptions options) : base(options)
@@ -14,6 +15,17 @@ namespace Security_CSharp.Data
 
         }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            // Create Roles
+            var ADMIN = new Role() { Name = "ADMIN" };
+            var USER = new Role() { Name = "USER" };
+
+            modelBuilder.Entity<Role>().HasData(ADMIN, USER);
+
+
+        }
 
     }
 }

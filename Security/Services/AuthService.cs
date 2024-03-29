@@ -13,15 +13,19 @@ namespace Security_CSharp.Security.Services
     public class AuthService : IAuthService
     {
         private readonly IAuthRepository _authRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _configuration;
 
         // Ændre efter behov. Sat til 2 timer.
         private readonly int EXPIRATION_HOURS = 2;
+        // Sæt værdien til null, hvis du vil fjerne default role.
+        private readonly string DEFAULT_ROLENAME = "USER";
 
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration)
+        public AuthService(IAuthRepository authRepository, IConfiguration configuration, IRoleRepository roleRepository)
         {
             this._authRepository = authRepository;
             this._configuration = configuration;
+            this._roleRepository = roleRepository;
         }
 
         public async Task<UserResponse> register(SignupRequest request)
@@ -34,15 +38,17 @@ namespace Security_CSharp.Security.Services
 
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            var createdUser = await _authRepository.CreateUser(
-                new User()
-                {
-                    Email = request.Email,
-                    Username = request.Username,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt
-                });
+            var newUser = new User()
+            {
+                Email = request.Email,
+                Username = request.Username,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
 
+            await SetDefaultRole(newUser);
+
+            var createdUser = await _authRepository.CreateUser(newUser);
             return createdUser.ToDTOUser();
         }
 
@@ -56,6 +62,15 @@ namespace Security_CSharp.Security.Services
             return new LoginResponse() { Username = userDb.Username, Token = CreateToken(userDb) };
         }
 
+        private async Task SetDefaultRole(User user)
+        {
+            if (DEFAULT_ROLENAME is null) return;
+
+            var roleToAssign = await _roleRepository.GetRoleByName(DEFAULT_ROLENAME) ?? throw new NotFoundException("Default role not found in db");
+
+            user.Roles.Add(roleToAssign);
+        }
+
         private string CreateToken(User user)
         {
             List<Claim> claims = new List<Claim>
@@ -63,7 +78,7 @@ namespace Security_CSharp.Security.Services
                 new Claim("iss", "almo.kea"),
                 new Claim("sub", user.Username),
                 new Claim("mail", user.Email),
-                // new Claim("roles", ROLLER)
+                new Claim("roles", string.Join(", ", user.Roles.Select(r => r.Name)) ?? ""),
                 new Claim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
             };
 

@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
+using Security_CSharp.Backend.Entities;
 
-namespace Security_CSharp.Controllers
+namespace Security_CSharp.Backend.Controllers
 {
     [ApiController]
     [Route("[controller]")]

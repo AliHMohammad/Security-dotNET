@@ -1,4 +1,4 @@
-namespace Security_CSharp
+namespace Security_CSharp.Backend.Entities
 {
     public class WeatherForecast
     {

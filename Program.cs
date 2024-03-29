@@ -12,24 +12,40 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// CORS Settings
+var MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(MyAllowSpecificOrigins,
+                          policy =>
+                          {
+                              policy.WithOrigins("http://example.com",
+                                                  "http://localhost:5173",
+                                                  "http://localhost:5174"
+                                                  )
+                                                  .AllowAnyHeader()
+                                                  .AllowAnyMethod();
+                          });
+});
+
 
 builder.Services.AddControllers();
 
-// Tilføj dine Services og Repositories
+// Using Response Caching
+builder.Services.AddResponseCaching();
+
+// Services and Repositories
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
 
 
-// Tilføj dine Seed data klasser
-//builder.Services.AddScoped<SeedDataAuth>();
 
-// Tilføj Custom Exceptionhandlers
+// Add Custom Exception Handlers
 builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();
 builder.Services.AddExceptionHandler<NotFoundExceptionHandler>();
 builder.Services.AddProblemDetails();
-
-
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -46,14 +62,15 @@ builder.Services.AddSwaggerGen(options =>
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
-// Vi specificerer Authentication schema
+// Specifying Authentication Schema
+var tokenSecret = builder.Configuration.GetSection("AppSettings:TokenSecret").Value ?? throw new Exception("TokenSecret is not set.");
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:TokenSecret").Value ?? throw new Exception("TokenSecret is not set."))),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(tokenSecret)),
             ValidateIssuer = false,
             ValidateAudience = false
         };
@@ -61,15 +78,13 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 
-// Database opsætning
-var connectionString = builder.Configuration.GetConnectionString("default");
+// Database
+var connectionString = builder.Configuration.GetConnectionString("default") ?? throw new Exception("\"default\" connectionString is not set.");
 var serverVersion = ServerVersion.AutoDetect(connectionString);
-
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    // Vi giver connectionString som argument
     options.UseMySql(connectionString, serverVersion)
-    // Nedenstående kun til dev. Slet ved deployment
+    // Only for development. Delete when deploying.
     .LogTo(Console.WriteLine, LogLevel.Information)
     .EnableSensitiveDataLogging()
     .EnableDetailedErrors();
@@ -85,24 +100,30 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
-app.UseAuthentication();
-app.UseAuthorization();
-app.MapControllers();
-
-// Vi bruger global exceptionhandlers
+// Using Custom ExceptionHandlers
 app.UseExceptionHandler();
 
 
-// Kør dine migrations ved opstart af api-server
+app.UseHttpsRedirection();
+
+// CORS
+app.UseCors(MyAllowSpecificOrigins);
+
+
+app.UseAuthentication();
+app.UseAuthorization();
+
+// Caching
+app.UseResponseCaching();
+
+app.MapControllers();
+
+
+// Run migrations at every start
 using var scope = app.Services.CreateScope();
 await using var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
 await dbContext.Database.EnsureDeletedAsync();
 await dbContext.Database.MigrateAsync();
-
-// Kør din seed-data klasser
-//scope.ServiceProvider.GetRequiredService<SeedDataAuth>().Initialize();
-
 
 
 app.Run();

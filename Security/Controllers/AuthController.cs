@@ -9,11 +9,13 @@ namespace Security_CSharp.Security.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IAuthService _authService;
+        private readonly IUserService _userService;
 
 
-        public AuthController(IAuthService authService)
+        public AuthController(IAuthService authService, IUserService userService)
         {
             this._authService = authService;
+            this._userService = userService;
         }
 
         [HttpPost("register")]

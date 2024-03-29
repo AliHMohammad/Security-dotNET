@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Security_CSharp.Security.DTOs;
 using Security_CSharp.Security.Interfaces;
 
@@ -27,6 +28,20 @@ namespace Security_CSharp.Security.Controllers
         {
             return Ok(await _authService.Login(request));
         }
+
+        [Authorize(Roles = "ADMIN")]
+        [HttpPatch("{username}/add/{role}")]
+        public async Task<ActionResult<UserResponse>> AddRole(string username, string role)
+        {
+            return Ok(await _authService.AddRole(username, role));
+        }
+
+        //[Authorize(Roles = "ADMIN")]
+        //[HttpPatch("{username:string}/remove/{role:string}")]
+        //public async Task<ActionResult<UserResponse>> RemoveRole(string username, string role)
+        //{
+
+        //}
 
 
 

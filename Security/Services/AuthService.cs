@@ -63,11 +63,22 @@ namespace Security_CSharp.Security.Services
             return new LoginResponse() { Username = userDb.Username, Token = CreateToken(userDb), Roles = userDb.Roles.Select(r => r.Name) };
         }
 
+        public async Task<UserResponse> AddRole(string username, string role)
+        {
+            var userDb = await _userRepository.GetUserByUsername(username) ?? throw new NotFoundException($"Could not find user by given username: {username}");
+            var roleDb = await _roleRepository.GetRoleByName(role) ?? throw new NotFoundException($"Could not find role by given name: {role}");
+
+            userDb.Roles.Add(roleDb);
+            await _userRepository.SaveChanges();
+
+            return userDb.ToDTOUser();
+        }
+
         private async Task SetDefaultRole(User user)
         {
             if (DEFAULT_ROLENAME is null) return;
 
-            var roleToAssign = await _roleRepository.GetRoleByName(DEFAULT_ROLENAME) ?? throw new NotFoundException("Default role not found in db");
+            var roleToAssign = await _roleRepository.GetRoleByName(DEFAULT_ROLENAME) ?? throw new NotFoundException($"Default role not found in db. Value: {DEFAULT_ROLENAME}");
 
             user.Roles.Add(roleToAssign);
         }

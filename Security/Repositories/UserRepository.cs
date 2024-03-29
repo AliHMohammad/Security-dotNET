@@ -36,5 +36,10 @@ namespace Security_CSharp.Security.Repositories
             return createdUser.Entity;
         }
 
+        public async Task SaveChanges()
+        {
+            await _dataContext.SaveChangesAsync();
+        }
+
     }
 }

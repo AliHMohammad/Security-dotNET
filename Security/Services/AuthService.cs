@@ -59,7 +59,8 @@ namespace Security_CSharp.Security.Services
             if (!VerifyPasswordHash(request.Password, userDb.PasswordHash, userDb.PasswordSalt)) throw new BadRequestException("Wrong username or password");
 
 
-            return new LoginResponse() { Username = userDb.Username, Token = CreateToken(userDb) };
+
+            return new LoginResponse() { Username = userDb.Username, Token = CreateToken(userDb), Roles = userDb.Roles.Select(r => r.Name) };
         }
 
         private async Task SetDefaultRole(User user)

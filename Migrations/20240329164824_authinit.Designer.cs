@@ -11,8 +11,8 @@ using Security_CSharp.Data;
 namespace Security_CSharp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240329021343_roles")]
-    partial class roles
+    [Migration("20240329164824_authinit")]
+    partial class authinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -26,17 +26,24 @@ namespace Security_CSharp.Migrations
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.Property<string>("RolesName")
+                    b.Property<string>("user_username")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("UsersUsername")
+                    b.Property<string>("role_name")
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("RolesName", "UsersUsername");
+                    b.HasKey("user_username", "role_name");
 
-                    b.HasIndex("UsersUsername");
+                    b.HasIndex("role_name");
 
                     b.ToTable("RoleUser");
+
+                    b.HasData(
+                        new
+                        {
+                            user_username = "Admin",
+                            role_name = "ADMIN"
+                        });
                 });
 
             modelBuilder.Entity("Security_CSharp.Security.Entitites.Role", b =>
@@ -79,19 +86,28 @@ namespace Security_CSharp.Migrations
                     b.HasKey("Username");
 
                     b.ToTable("Users");
+
+                    b.HasData(
+                        new
+                        {
+                            Username = "Admin",
+                            Email = "admin@kea.dk",
+                            PasswordHash = new byte[] { 3, 243, 180, 78, 94, 151, 66, 113, 105, 133, 200, 176, 130, 150, 30, 223, 117, 192, 205, 198, 68, 158, 104, 215, 11, 255, 214, 83, 253, 72, 66, 223 },
+                            PasswordSalt = new byte[] { 103, 144, 196, 119, 21, 146, 69, 144, 62, 208, 246, 129, 128, 80, 4, 149, 248, 78, 164, 116, 227, 11, 35, 188, 64, 41, 201, 178, 8, 103, 96, 135, 94, 160, 128, 0, 161, 64, 233, 175, 45, 184, 242, 46, 212, 36, 210, 165, 191, 193, 35, 203, 167, 245, 254, 213, 181, 9, 110, 38, 196, 127, 244, 153 }
+                        });
                 });
 
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.HasOne("Security_CSharp.Security.Entitites.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesName")
+                        .HasForeignKey("role_name")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Security_CSharp.Security.Entitites.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersUsername")
+                        .HasForeignKey("user_username")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

@@ -15,9 +15,14 @@ var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddControllers();
 
+// Tilføj dine Services og Repositories
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IAuthRepository, AuthRepository>();
 builder.Services.AddScoped<IRoleRepository, RoleRepository>();
+
+
+// Tilføj dine Seed data klasser
+//builder.Services.AddScoped<SeedDataAuth>();
 
 // Tilføj Custom Exceptionhandlers
 builder.Services.AddExceptionHandler<BadRequestExceptionHandler>();
@@ -48,7 +53,7 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuerSigningKey = true,
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:TokenSecret").Value)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration.GetSection("AppSettings:TokenSecret").Value ?? throw new Exception("TokenSecret is not set."))),
             ValidateIssuer = false,
             ValidateAudience = false
         };
@@ -88,11 +93,16 @@ app.MapControllers();
 // Vi bruger global exceptionhandlers
 app.UseExceptionHandler();
 
+
 // Kør dine migrations ved opstart af api-server
 using var scope = app.Services.CreateScope();
 await using var dbContext = scope.ServiceProvider.GetRequiredService<DataContext>();
 await dbContext.Database.EnsureDeletedAsync();
 await dbContext.Database.MigrateAsync();
+
+// Kør din seed-data klasser
+//scope.ServiceProvider.GetRequiredService<SeedDataAuth>().Initialize();
+
 
 
 app.Run();

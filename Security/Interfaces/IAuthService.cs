@@ -6,6 +6,6 @@ namespace Security_CSharp.Security.Interfaces
     {
 
         Task<UserResponse> register(SignupRequest request);
-
+        Task<LoginResponse> Login(LoginRequest request);
     }
 }

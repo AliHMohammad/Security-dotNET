@@ -21,7 +21,8 @@ namespace Security_CSharp.Migrations
                         .Annotation("MySql:CharSet", "utf8mb4"),
                     Email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PasswordHash = table.Column<byte[]>(type: "longblob", nullable: false)
+                    PasswordHash = table.Column<byte[]>(type: "longblob", nullable: false),
+                    PasswordSalt = table.Column<byte[]>(type: "longblob", nullable: false)
                 },
                 constraints: table =>
                 {

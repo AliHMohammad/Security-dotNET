@@ -23,6 +23,12 @@ namespace Security_CSharp.Security.Controllers
             return Ok(await _authService.register(request));
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult<LoginResponse>> Login(LoginRequest request)
+        {
+            return Ok(await _authService.Login(request));
+        }
+
 
 
     }

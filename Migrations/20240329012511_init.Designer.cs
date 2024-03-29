@@ -11,7 +11,7 @@ using Security_CSharp.Data;
 namespace Security_CSharp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240329004118_init")]
+    [Migration("20240329012511_init")]
     partial class init
     {
         /// <inheritdoc />
@@ -34,6 +34,10 @@ namespace Security_CSharp.Migrations
                         .HasColumnType("longtext");
 
                     b.Property<byte[]>("PasswordHash")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
+                    b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
                         .HasColumnType("longblob");
 

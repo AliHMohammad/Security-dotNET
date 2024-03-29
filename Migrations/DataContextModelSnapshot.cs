@@ -34,6 +34,10 @@ namespace Security_CSharp.Migrations
                         .IsRequired()
                         .HasColumnType("longblob");
 
+                    b.Property<byte[]>("PasswordSalt")
+                        .IsRequired()
+                        .HasColumnType("longblob");
+
                     b.HasKey("Username");
 
                     b.ToTable("Users");

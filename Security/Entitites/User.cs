@@ -14,5 +14,6 @@ namespace Security_CSharp.Security.Entitites
         [Required]
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
+        public byte[] PasswordSalt { get; set; }
     }
 }

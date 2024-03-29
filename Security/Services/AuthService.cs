@@ -67,8 +67,8 @@ namespace Security_CSharp.Security.Services
                 new Claim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
             };
 
-
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration["AppSettings:SecretToken"]));
+            // Vi har gemt vores TokenSecret i vores user secret storage
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:TokenSecret").Value));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var tokenPayload = new JwtSecurityToken(

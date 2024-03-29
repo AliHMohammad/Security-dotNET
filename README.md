@@ -1,4 +1,4 @@
-# Security-CSharp
+# Security-dotNET
 
 Authentication & role-based Authorization template in ASP.NET Core using JWT. Configured for a MySQL database. The template utilizes two roles, `USER` and `ADMIN`, but that can be easily configured inside `SeedDataAuth.cs`.
 

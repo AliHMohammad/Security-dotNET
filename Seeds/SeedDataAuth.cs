@@ -10,7 +10,7 @@ namespace Security_CSharp.Seeds
         public static void SeedDataAuthInit(this ModelBuilder modelBuilder, IConfiguration configuration)
         {
 
-            // Settings:
+            // SETTINGS:
             var adminUsername = "Admin";
             var adminEmail = "admin@kea.dk";
             var adminPassword = configuration.GetSection("AppSettings:AdminPassword").Value ?? throw new Exception("AdminPassword is not set in user secrets.");

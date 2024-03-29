@@ -5,11 +5,11 @@ using Security_CSharp.Security.Interfaces;
 
 namespace Security_CSharp.Security.Repositories
 {
-    public class AuthRepository : IAuthRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _dataContext;
 
-        public AuthRepository(DataContext dataContext)
+        public UserRepository(DataContext dataContext)
         {
             this._dataContext = dataContext;
         }

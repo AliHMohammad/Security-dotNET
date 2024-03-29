@@ -9,13 +9,12 @@ namespace Security_CSharp.Security.Entitites
         [Required]
         public string Username { get; set; }
 
-
         [EmailAddress]
         [Required]
         public string Email { get; set; }
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
 
-        public ICollection<Role> Roles { get; set; } = new List<Role>();
+        public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
     }
 }

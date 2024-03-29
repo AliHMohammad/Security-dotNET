@@ -8,6 +8,6 @@ namespace Security_CSharp.Security.Entitites
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
         public string Name { get; set; }
 
-        public ICollection<User> Users { get; set; } = new List<User>();
+        public ICollection<User> Users { get; set; } = new HashSet<User>();
     }
 }

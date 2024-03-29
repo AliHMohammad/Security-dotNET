@@ -2,7 +2,7 @@
 
 namespace Security_CSharp.Security.Interfaces
 {
-    public interface IAuthRepository
+    public interface IUserRepository
     {
 
         Task<User?> GetUserByUsername(string username);

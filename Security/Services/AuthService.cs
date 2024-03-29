@@ -12,7 +12,7 @@ namespace Security_CSharp.Security.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IAuthRepository _authRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _configuration;
 
@@ -21,17 +21,17 @@ namespace Security_CSharp.Security.Services
         // Sæt værdien til null, hvis du vil fjerne default role.
         private readonly string DEFAULT_ROLENAME = "USER";
 
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration, IRoleRepository roleRepository)
+        public AuthService(IUserRepository userRepository, IConfiguration configuration, IRoleRepository roleRepository)
         {
-            this._authRepository = authRepository;
+            this._userRepository = userRepository;
             this._configuration = configuration;
             this._roleRepository = roleRepository;
         }
 
         public async Task<UserResponse> register(SignupRequest request)
         {
-            var userDbEmail = await _authRepository.GetUserByEmail(request.Email);
-            var userDbUsername = await _authRepository.GetUserByUsername(request.Username);
+            var userDbEmail = await _userRepository.GetUserByEmail(request.Email);
+            var userDbUsername = await _userRepository.GetUserByUsername(request.Username);
 
             if (userDbEmail is not null) throw new BadRequestException($"User with email {request.Email} exists already.");
             if (userDbUsername is not null) throw new BadRequestException($"User with username {request.Username} exists already.");
@@ -48,14 +48,14 @@ namespace Security_CSharp.Security.Services
 
             await SetDefaultRole(newUser);
 
-            var createdUser = await _authRepository.CreateUser(newUser);
+            var createdUser = await _userRepository.CreateUser(newUser);
             return createdUser.ToDTOUser();
         }
 
 
         public async Task<LoginResponse> Login(LoginRequest request)
         {
-            var userDb = await _authRepository.GetUserByUsername(request.Username) ?? throw new BadRequestException("Wrong username or password");
+            var userDb = await _userRepository.GetUserByUsername(request.Username) ?? throw new BadRequestException("Wrong username or password");
             if (!VerifyPasswordHash(request.Password, userDb.PasswordHash, userDb.PasswordSalt)) throw new BadRequestException("Wrong username or password");
 
 
@@ -84,7 +84,9 @@ namespace Security_CSharp.Security.Services
             };
 
             // Vi har gemt vores TokenSecret i vores user secret storage
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:TokenSecret").Value));
+            var tokenSecret = _configuration.GetSection("AppSettings:TokenSecret").Value ?? throw new Exception("TokenSecret is not set.");
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var tokenPayload = new JwtSecurityToken(

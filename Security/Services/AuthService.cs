@@ -12,48 +12,64 @@ namespace Security_CSharp.Security.Services
 {
     public class AuthService : IAuthService
     {
-        private readonly IAuthRepository _authRepository;
+        private readonly IUserRepository _userRepository;
+        private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _configuration;
 
         // Ændre efter behov. Sat til 2 timer.
         private readonly int EXPIRATION_HOURS = 2;
+        // Sæt værdien til null, hvis du vil fjerne default role.
+        private readonly string DEFAULT_ROLENAME = "USER";
 
-        public AuthService(IAuthRepository authRepository, IConfiguration configuration)
+        public AuthService(IUserRepository userRepository, IConfiguration configuration, IRoleRepository roleRepository)
         {
-            this._authRepository = authRepository;
+            this._userRepository = userRepository;
             this._configuration = configuration;
+            this._roleRepository = roleRepository;
         }
 
         public async Task<UserResponse> register(SignupRequest request)
         {
-            var userDbEmail = await _authRepository.GetUserByEmail(request.Email);
-            var userDbUsername = await _authRepository.GetUserByUsername(request.Username);
+            var userDbEmail = await _userRepository.GetUserByEmail(request.Email);
+            var userDbUsername = await _userRepository.GetUserByUsername(request.Username);
 
             if (userDbEmail is not null) throw new BadRequestException($"User with email {request.Email} exists already.");
             if (userDbUsername is not null) throw new BadRequestException($"User with username {request.Username} exists already.");
 
             CreatePasswordHash(request.Password, out byte[] passwordHash, out byte[] passwordSalt);
 
-            var createdUser = await _authRepository.CreateUser(
-                new User()
-                {
-                    Email = request.Email,
-                    Username = request.Username,
-                    PasswordHash = passwordHash,
-                    PasswordSalt = passwordSalt
-                });
+            var newUser = new User()
+            {
+                Email = request.Email,
+                Username = request.Username,
+                PasswordHash = passwordHash,
+                PasswordSalt = passwordSalt
+            };
 
+            await SetDefaultRole(newUser);
+
+            var createdUser = await _userRepository.CreateUser(newUser);
             return createdUser.ToDTOUser();
         }
 
 
         public async Task<LoginResponse> Login(LoginRequest request)
         {
-            var userDb = await _authRepository.GetUserByUsername(request.Username) ?? throw new BadRequestException("Wrong username or password");
+            var userDb = await _userRepository.GetUserByUsername(request.Username) ?? throw new BadRequestException("Wrong username or password");
             if (!VerifyPasswordHash(request.Password, userDb.PasswordHash, userDb.PasswordSalt)) throw new BadRequestException("Wrong username or password");
 
 
-            return new LoginResponse() { Username = userDb.Username, Token = CreateToken(userDb) };
+
+            return new LoginResponse() { Username = userDb.Username, Token = CreateToken(userDb), Roles = userDb.Roles.Select(r => r.Name) };
+        }
+
+        private async Task SetDefaultRole(User user)
+        {
+            if (DEFAULT_ROLENAME is null) return;
+
+            var roleToAssign = await _roleRepository.GetRoleByName(DEFAULT_ROLENAME) ?? throw new NotFoundException("Default role not found in db");
+
+            user.Roles.Add(roleToAssign);
         }
 
         private string CreateToken(User user)
@@ -63,12 +79,14 @@ namespace Security_CSharp.Security.Services
                 new Claim("iss", "almo.kea"),
                 new Claim("sub", user.Username),
                 new Claim("mail", user.Email),
-                // new Claim("roles", ROLLER)
+                new Claim("roles", string.Join(", ", user.Roles.Select(r => r.Name)) ?? ""),
                 new Claim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
             };
 
             // Vi har gemt vores TokenSecret i vores user secret storage
-            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:TokenSecret").Value));
+            var tokenSecret = _configuration.GetSection("AppSettings:TokenSecret").Value ?? throw new Exception("TokenSecret is not set.");
+
+            var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenSecret));
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var tokenPayload = new JwtSecurityToken(

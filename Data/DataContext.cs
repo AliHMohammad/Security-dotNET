@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Security_CSharp.Security.Entitites;
+using Security_CSharp.Seeds;
 
 namespace Security_CSharp.Data
 {
@@ -7,13 +8,22 @@ namespace Security_CSharp.Data
     {
 
         public DbSet<User> Users { get; set; }
+        public DbSet<Role> Roles { get; set; }
+
+        private readonly IConfiguration _configuration;
 
 
-        public DataContext(DbContextOptions options) : base(options)
+        public DataContext(DbContextOptions options, IConfiguration configuration) : base(options)
         {
-
+            _configuration = configuration;
         }
 
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.SeedDataAuthInit(_configuration);
+            //Tilføj flere Seed-data klasser her
+        }
 
     }
 }

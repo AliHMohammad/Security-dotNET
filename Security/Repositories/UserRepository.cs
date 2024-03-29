@@ -5,23 +5,27 @@ using Security_CSharp.Security.Interfaces;
 
 namespace Security_CSharp.Security.Repositories
 {
-    public class AuthRepository : IAuthRepository
+    public class UserRepository : IUserRepository
     {
         private readonly DataContext _dataContext;
 
-        public AuthRepository(DataContext dataContext)
+        public UserRepository(DataContext dataContext)
         {
             this._dataContext = dataContext;
         }
 
         public async Task<User?> GetUserByUsername(string username)
         {
-            return await _dataContext.Users.FindAsync(username);
+            return await _dataContext.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Username == username);
         }
 
         public async Task<User?> GetUserByEmail(string email)
         {
-            return await _dataContext.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return await _dataContext.Users
+                .Include(u => u.Roles)
+                .FirstOrDefaultAsync(u => u.Email == email);
         }
 
         public async Task<User> CreateUser(User user)

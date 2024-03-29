@@ -2,6 +2,7 @@
 using Security_CSharp.Security.DTOs;
 using Security_CSharp.Security.Interfaces;
 using Security_CSharp.Security.Mappers;
+using System.Security.Claims;
 
 namespace Security_CSharp.Security.Services
 {
@@ -38,6 +39,16 @@ namespace Security_CSharp.Security.Services
             await _userRepository.SaveChanges();
 
             return userDb.ToDTOUser();
+        }
+
+        public async Task DeleteUser(ClaimsPrincipal principal)
+        {
+            var usernameClaim = principal.FindFirst("subject") ?? throw new BadRequestException("Username claim \"subject\" not found in principal.");
+
+            var userdb = await _userRepository.GetUserByUsername(usernameClaim.Value)
+                ?? throw new NotFoundException($"Could not find user by username in token: {usernameClaim.Value}");
+
+            await _userRepository.DeleteUser(userdb);
         }
     }
 }

@@ -36,6 +36,12 @@ namespace Security_CSharp.Security.Repositories
             return createdUser.Entity;
         }
 
+        public async Task DeleteUser(User user)
+        {
+            _dataContext.Users.Remove(user);
+            await _dataContext.SaveChangesAsync();
+        }
+
         public async Task SaveChanges()
         {
             await _dataContext.SaveChangesAsync();

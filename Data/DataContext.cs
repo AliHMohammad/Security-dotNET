@@ -22,7 +22,7 @@ namespace Security_CSharp.Data
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.SeedDataAuthInit(_configuration);
-            //Tilføj flere Seed-data klasser her
+            //Add more Seed-data classes here
         }
 
     }

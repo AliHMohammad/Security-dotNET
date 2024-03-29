@@ -12,9 +12,10 @@ namespace Security_CSharp.Security.Controllers
 
         private readonly IUserService _userService;
 
-        public UserController(IAuthService authService, IUserService userService)
+        public UserController(IUserService userService)
         {
-            this._userService = userService;
+            _userService = userService;
+
         }
 
         [Authorize(Roles = "ADMIN")]
@@ -31,6 +32,22 @@ namespace Security_CSharp.Security.Controllers
             return Ok(await _userService.RemoveRole(username, role));
         }
 
+        [Authorize]
+        [HttpDelete]
+        public async Task<ActionResult> DeleteUser()
+        {
+            // Get principal by the assigned token
+            var principal = HttpContext.User;
 
+            await _userService.DeleteUser(principal);
+            return NoContent();
+        }
+
+
+        // Missing implementations:
+
+        // 1. Get Users
+        // 2. Get single User
+        // 3. Update (put) User
     }
 }

@@ -16,9 +16,9 @@ namespace Security_CSharp.Security.Services
         private readonly IRoleRepository _roleRepository;
         private readonly IConfiguration _configuration;
 
-        // Ændre efter behov. Sat til 2 timer.
+        // Change if necesesarry
         private readonly int EXPIRATION_HOURS = 2;
-        // Sæt værdien til null, hvis du vil fjerne default role.
+        // Change to null to not assign a default role on register
         private readonly string DEFAULT_ROLENAME = "USER";
 
         public AuthService(IUserRepository userRepository, IConfiguration configuration, IRoleRepository roleRepository)
@@ -77,13 +77,13 @@ namespace Security_CSharp.Security.Services
             List<Claim> claims = new List<Claim>
             {
                 new Claim("iss", "almo.kea"),
-                new Claim("sub", user.Username),
+                new Claim("subject", user.Username),
                 new Claim("mail", user.Email),
                 new Claim("roles", string.Join(", ", user.Roles.Select(r => r.Name)) ?? ""),
                 new Claim("iat", DateTimeOffset.UtcNow.ToUnixTimeSeconds().ToString())
             };
 
-            // Vi har gemt vores TokenSecret i vores user secret storage
+            // TokenSecret is stored in user secret AppSettings:TokenSecret
             var tokenSecret = _configuration.GetSection("AppSettings:TokenSecret").Value ?? throw new Exception("TokenSecret is not set.");
 
             var key = new SymmetricSecurityKey(System.Text.Encoding.UTF8.GetBytes(tokenSecret));

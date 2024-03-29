@@ -74,6 +74,17 @@ namespace Security_CSharp.Security.Services
             return userDb.ToDTOUser();
         }
 
+        public async Task<UserResponse> RemoveRole(string username, string role)
+        {
+            var userDb = await _userRepository.GetUserByUsername(username) ?? throw new NotFoundException($"Could not find user by given username: {username}");
+            var roleDb = await _roleRepository.GetRoleByName(role) ?? throw new NotFoundException($"Could not find role by given name: {role}");
+
+            userDb.Roles.Remove(roleDb);
+            await _userRepository.SaveChanges();
+
+            return userDb.ToDTOUser();
+        }
+
         private async Task SetDefaultRole(User user)
         {
             if (DEFAULT_ROLENAME is null) return;
@@ -128,5 +139,6 @@ namespace Security_CSharp.Security.Services
                 return computedHash.SequenceEqual(passwordHash);
             }
         }
+
     }
 }

@@ -36,14 +36,12 @@ namespace Security_CSharp.Security.Controllers
             return Ok(await _authService.AddRole(username, role));
         }
 
-        //[Authorize(Roles = "ADMIN")]
-        //[HttpPatch("{username:string}/remove/{role:string}")]
-        //public async Task<ActionResult<UserResponse>> RemoveRole(string username, string role)
-        //{
-
-        //}
-
-
+        [Authorize(Roles = "ADMIN")]
+        [HttpPatch("{username}/remove/{role}")]
+        public async Task<ActionResult<UserResponse>> RemoveRole(string username, string role)
+        {
+            return Ok(await _authService.RemoveRole(username, role));
+        }
 
     }
 }

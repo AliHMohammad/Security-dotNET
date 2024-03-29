@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Security_CSharp.Data;
 
@@ -10,9 +11,11 @@ using Security_CSharp.Data;
 namespace Security_CSharp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240329153515_admin")]
+    partial class admin
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -23,24 +26,17 @@ namespace Security_CSharp.Migrations
 
             modelBuilder.Entity("RoleUser", b =>
                 {
-                    b.Property<string>("user_username")
+                    b.Property<string>("RolesName")
                         .HasColumnType("varchar(255)");
 
-                    b.Property<string>("role_name")
+                    b.Property<string>("UsersUsername")
                         .HasColumnType("varchar(255)");
 
-                    b.HasKey("user_username", "role_name");
+                    b.HasKey("RolesName", "UsersUsername");
 
-                    b.HasIndex("role_name");
+                    b.HasIndex("UsersUsername");
 
                     b.ToTable("RoleUser");
-
-                    b.HasData(
-                        new
-                        {
-                            user_username = "Admin",
-                            role_name = "ADMIN"
-                        });
                 });
 
             modelBuilder.Entity("Security_CSharp.Security.Entitites.Role", b =>
@@ -89,8 +85,8 @@ namespace Security_CSharp.Migrations
                         {
                             Username = "Admin",
                             Email = "Admin@kea.dk",
-                            PasswordHash = new byte[] { 75, 196, 79, 128, 244, 127, 61, 193, 191, 42, 78, 10, 14, 141, 99, 230, 130, 9, 250, 28, 126, 203, 98, 248, 14, 191, 77, 134, 102, 254, 92, 214 },
-                            PasswordSalt = new byte[] { 5, 145, 96, 86, 69, 244, 179, 178, 8, 66, 215, 78, 208, 0, 6, 124, 136, 252, 14, 198, 21, 23, 107, 207, 191, 48, 91, 4, 189, 183, 244, 67, 90, 46, 90, 46, 66, 112, 95, 215, 80, 43, 135, 21, 150, 138, 143, 141, 11, 202, 142, 3, 170, 253, 162, 200, 220, 184, 250, 147, 23, 234, 189, 159 }
+                            PasswordHash = new byte[] { 15, 105, 101, 107, 65, 239, 16, 237, 127, 69, 97, 119, 129, 52, 82, 90, 25, 112, 109, 23, 241, 93, 245, 68, 228, 192, 112, 41, 149, 137, 100, 155 },
+                            PasswordSalt = new byte[] { 127, 56, 225, 129, 160, 228, 147, 212, 85, 25, 0, 4, 190, 198, 241, 61, 40, 43, 45, 217, 154, 95, 8, 241, 37, 34, 105, 132, 3, 66, 66, 211, 40, 43, 56, 155, 147, 129, 209, 181, 123, 29, 217, 120, 139, 239, 118, 56, 29, 8, 6, 146, 188, 141, 40, 137, 192, 105, 134, 86, 160, 18, 182, 149 }
                         });
                 });
 
@@ -98,13 +94,13 @@ namespace Security_CSharp.Migrations
                 {
                     b.HasOne("Security_CSharp.Security.Entitites.Role", null)
                         .WithMany()
-                        .HasForeignKey("role_name")
+                        .HasForeignKey("RolesName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("Security_CSharp.Security.Entitites.User", null)
                         .WithMany()
-                        .HasForeignKey("user_username")
+                        .HasForeignKey("UsersUsername")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

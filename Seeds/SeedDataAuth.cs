@@ -14,7 +14,8 @@ namespace Security_CSharp.Seeds
             var adminUsername = "Admin";
             var adminEmail = "admin@kea.dk";
             // Admin password is saved in user secrets
-            var adminPassword = configuration.GetSection("AppSettings:AdminPassword").Value ?? throw new Exception("AdminPassword is not set in user secrets.");
+            var adminPassword = configuration.GetSection("AppSettings:AdminPassword").Value
+                ?? throw new Exception("AdminPassword is not set in user secrets.");
 
 
             // Create Roles

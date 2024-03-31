@@ -18,6 +18,7 @@ namespace Security_CSharp.Security.Entitites
         [Column("password_salt")]
         public byte[] PasswordSalt { get; set; }
 
+        [Column("created_at")]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<Role> Roles { get; set; } = new HashSet<Role>();

@@ -6,14 +6,19 @@ namespace Security_CSharp.Security.Entitites
     public class User
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.None)]
-        [Required]
+        [Column("username")]
         public string Username { get; set; }
 
-        [EmailAddress]
-        [Required]
+        [Column("email")]
         public string Email { get; set; }
+
+        [Column("password_hash")]
         public byte[] PasswordHash { get; set; }
+
+        [Column("password_salt")]
         public byte[] PasswordSalt { get; set; }
+
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
 
         public ICollection<Role> Roles { get; set; } = new HashSet<Role>();
     }

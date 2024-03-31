@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -17,12 +18,12 @@ namespace Security_CSharp.Migrations
                 name: "Roles",
                 columns: table => new
                 {
-                    Name = table.Column<string>(type: "varchar(255)", nullable: false)
+                    name = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4")
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Roles", x => x.Name);
+                    table.PrimaryKey("PK_Roles", x => x.name);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -30,16 +31,17 @@ namespace Security_CSharp.Migrations
                 name: "Users",
                 columns: table => new
                 {
-                    Username = table.Column<string>(type: "varchar(255)", nullable: false)
+                    username = table.Column<string>(type: "varchar(255)", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    Email = table.Column<string>(type: "longtext", nullable: false)
+                    email = table.Column<string>(type: "longtext", nullable: false)
                         .Annotation("MySql:CharSet", "utf8mb4"),
-                    PasswordHash = table.Column<byte[]>(type: "longblob", nullable: false),
-                    PasswordSalt = table.Column<byte[]>(type: "longblob", nullable: false)
+                    password_hash = table.Column<byte[]>(type: "longblob", nullable: false),
+                    password_salt = table.Column<byte[]>(type: "longblob", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime(6)", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Users", x => x.Username);
+                    table.PrimaryKey("PK_Users", x => x.username);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
@@ -59,20 +61,20 @@ namespace Security_CSharp.Migrations
                         name: "FK_RoleUser_Roles_role_name",
                         column: x => x.role_name,
                         principalTable: "Roles",
-                        principalColumn: "Name",
+                        principalColumn: "name",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_RoleUser_Users_user_username",
                         column: x => x.user_username,
                         principalTable: "Users",
-                        principalColumn: "Username",
+                        principalColumn: "username",
                         onDelete: ReferentialAction.Cascade);
                 })
                 .Annotation("MySql:CharSet", "utf8mb4");
 
             migrationBuilder.InsertData(
                 table: "Roles",
-                column: "Name",
+                column: "name",
                 values: new object[]
                 {
                     "ADMIN",
@@ -81,8 +83,8 @@ namespace Security_CSharp.Migrations
 
             migrationBuilder.InsertData(
                 table: "Users",
-                columns: new[] { "Username", "Email", "PasswordHash", "PasswordSalt" },
-                values: new object[] { "Admin", "admin@kea.dk", new byte[] { 195, 98, 110, 174, 131, 11, 250, 48, 81, 27, 23, 107, 209, 220, 231, 180, 84, 123, 61, 164, 241, 74, 148, 44, 195, 151, 247, 94, 175, 100, 65, 128 }, new byte[] { 11, 145, 241, 194, 113, 155, 124, 62, 184, 27, 23, 252, 87, 157, 140, 70, 142, 210, 38, 83, 124, 180, 38, 159, 131, 170, 32, 237, 112, 231, 192, 46, 140, 135, 109, 229, 224, 50, 226, 190, 66, 222, 118, 182, 32, 132, 141, 92, 47, 156, 42, 151, 45, 241, 244, 139, 214, 70, 237, 0, 106, 45, 119, 140 } });
+                columns: new[] { "username", "CreatedAt", "email", "password_hash", "password_salt" },
+                values: new object[] { "Admin", new DateTime(2024, 3, 31, 23, 51, 28, 811, DateTimeKind.Local).AddTicks(862), "admin@kea.dk", new byte[] { 104, 150, 192, 42, 149, 165, 109, 242, 220, 225, 227, 195, 10, 63, 127, 9, 102, 100, 46, 155, 27, 153, 137, 108, 23, 255, 19, 143, 115, 211, 102, 125 }, new byte[] { 150, 55, 9, 229, 163, 127, 81, 230, 230, 198, 107, 114, 191, 247, 18, 107, 49, 226, 149, 36, 118, 14, 251, 175, 37, 255, 199, 114, 61, 15, 202, 132, 87, 105, 203, 4, 0, 152, 141, 215, 69, 65, 178, 180, 223, 15, 0, 124, 228, 41, 11, 52, 85, 181, 73, 187, 109, 180, 160, 40, 190, 26, 27, 169 } });
 
             migrationBuilder.InsertData(
                 table: "RoleUser",

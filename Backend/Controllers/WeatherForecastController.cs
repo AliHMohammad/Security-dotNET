@@ -20,9 +20,11 @@ namespace Security_CSharp.Backend.Controllers
             _logger = logger;
         }
 
+
         // Backend caching. Duration in seconds
         [ResponseCache(Duration = 3600)]
-        [HttpGet, Authorize(Roles = "ADMIN")]
+        // Roles = "USER", if singular role.
+        [HttpGet, Authorize(Roles = "USER, ADMIN")]
         public IEnumerable<WeatherForecast> Get()
         {
             return Enumerable.Range(1, 5).Select(index => new WeatherForecast

@@ -93,16 +93,15 @@ builder.Services.AddDbContext<DataContext>(options =>
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
+
 //if (app.Environment.IsDevelopment())
-//{ }
+//{ 
 app.UseSwagger();
 app.UseSwaggerUI();
+// }
 
-
-// Using Custom ExceptionHandlers
+// Apply Custom ExceptionHandlers
 app.UseExceptionHandler();
-
 
 app.UseHttpsRedirection();
 

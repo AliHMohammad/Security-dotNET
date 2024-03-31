@@ -5,7 +5,7 @@ Authentication & role-based Authorization template in ASP.NET Core using JWT. Co
 
 Created By [AliHMohammad](https://github.com/AliHMohammad)
 
-[Deployed on Azure](https://auth-api-almo.azurewebsites.net/)
+[Deployed on Azure](https://auth-api-almo.azurewebsites.net/swagger/index.html)
 
 ## Installation
 
@@ -60,13 +60,13 @@ dotnet user-secrets set "AppSettings:AdminPassword" "ADMIN_PASSWORD"
 ```
 dotnet run 
 ```
-Default URL is set to https://localhost:7236
-
 
 
 ## Documentation
 
-Navigate to https://localhost:7236/swagger/index.html for Swagger Documentation
+Navigate to `/swagger/index.html` for Swagger Documentation or click on the deployment link above.
+
+#### Postman
 
 [<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/29408900-e4d666a5-1a9f-4d61-bc17-568392a395de?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D29408900-e4d666a5-1a9f-4d61-bc17-568392a395de%26entityType%3Dcollection%26workspaceId%3D61a12064-f02a-4b89-9cf0-b48f6e161f1c)
 

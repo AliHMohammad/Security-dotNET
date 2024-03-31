@@ -1,8 +1,11 @@
 # Security-dotNET
+[![Build and deploy ASP.Net Core app to Azure Web App - auth-api-almo](https://github.com/AliHMohammad/Security-dotNET/actions/workflows/master_auth-api-almo.yml/badge.svg)](https://github.com/AliHMohammad/Security-dotNET/actions/workflows/master_auth-api-almo.yml)
 
 Authentication & role-based Authorization template in ASP.NET Core using JWT. Configured for a MySQL database. The template utilizes two roles, `USER` and `ADMIN`, but that can be easily configured inside `SeedDataAuth.cs`.
 
 Created By [AliHMohammad](https://github.com/AliHMohammad)
+
+[Deployed on Azure](https://auth-api-almo.azurewebsites.net/)
 
 ## Installation
 

@@ -14,8 +14,8 @@ namespace Security_CSharp.Security.Controllers
 
         public AuthController(IAuthService authService, IUserService userService)
         {
-            this._authService = authService;
-            this._userService = userService;
+            _authService = authService;
+            _userService = userService;
         }
 
         [HttpPost("register")]

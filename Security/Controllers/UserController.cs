@@ -15,7 +15,6 @@ namespace Security_CSharp.Security.Controllers
         public UserController(IUserService userService)
         {
             _userService = userService;
-
         }
 
         [Authorize(Roles = "ADMIN")]

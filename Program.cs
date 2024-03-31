@@ -35,6 +35,7 @@ builder.Services.AddControllers();
 builder.Services.AddResponseCaching();
 
 // Services and Repositories
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();

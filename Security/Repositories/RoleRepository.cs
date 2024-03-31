@@ -11,7 +11,7 @@ namespace Security_CSharp.Security.Repositories
 
         public RoleRepository(DataContext dataContext)
         {
-            this._dataContext = dataContext;
+            _dataContext = dataContext;
         }
 
         public async Task<Role?> GetRoleByName(string name)

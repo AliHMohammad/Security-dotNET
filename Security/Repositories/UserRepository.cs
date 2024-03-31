@@ -11,7 +11,7 @@ namespace Security_CSharp.Security.Repositories
 
         public UserRepository(DataContext dataContext)
         {
-            this._dataContext = dataContext;
+            _dataContext = dataContext;
         }
 
         public async Task<User?> GetUserByUsername(string username)
@@ -39,11 +39,6 @@ namespace Security_CSharp.Security.Repositories
         public async Task DeleteUser(User user)
         {
             _dataContext.Users.Remove(user);
-            await _dataContext.SaveChangesAsync();
-        }
-
-        public async Task SaveChanges()
-        {
             await _dataContext.SaveChangesAsync();
         }
 

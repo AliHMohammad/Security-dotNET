@@ -1,19 +1,21 @@
 # Security-dotNET
 [![Build and deploy ASP.Net Core app to Azure Web App - auth-api-almo](https://github.com/AliHMohammad/Security-dotNET/actions/workflows/master_auth-api-almo.yml/badge.svg)](https://github.com/AliHMohammad/Security-dotNET/actions/workflows/master_auth-api-almo.yml)
 
-Authentication & role-based Authorization template in ASP.NET Core using JWT. Configured for a MySQL database. The template utilizes two roles, `USER` and `ADMIN`, but that can be easily configured inside `SeedDataAuth.cs`.
+Authentication & role-based Authorization template in ASP.NET EF Core using JWT. Configured for a MySQL database. The template utilizes two roles, `USER` and `ADMIN`, but that can be easily configured inside `SeedDataAuth.cs`.
 
 Created By [AliHMohammad](https://github.com/AliHMohammad)
 
+#### Deployment
 [Deployed on Azure](https://auth-api-almo.azurewebsites.net/swagger/index.html)
+
 
 ## Installation
 
 
 #### Prerequisites:
 
-* Latest [.NET Framework](https://dotnet.microsoft.com/en-us/download/visual-studio-sdks)
-* [Dotnet ef](https://learn.microsoft.com/en-us/ef/core/cli/dotnet) tool
+* Latest stable [.NET SDK](https://dotnet.microsoft.com/en-us/download)
+* [.NET Core CLI-tool](https://learn.microsoft.com/en-us/ef/core/cli/dotnet)
 
 #### 1. Clone the repository:
 
@@ -65,12 +67,4 @@ dotnet run
 ## Documentation
 
 Navigate to `/swagger/index.html` for Swagger Documentation or click on the deployment link above.
-
-#### Postman
-
-[<img src="https://run.pstmn.io/button.svg" alt="Run In Postman" style="width: 128px; height: 32px;">](https://app.getpostman.com/run-collection/29408900-e4d666a5-1a9f-4d61-bc17-568392a395de?action=collection%2Ffork&source=rip_markdown&collection-url=entityId%3D29408900-e4d666a5-1a9f-4d61-bc17-568392a395de%26entityType%3Dcollection%26workspaceId%3D61a12064-f02a-4b89-9cf0-b48f6e161f1c)
-
-
-
-
 

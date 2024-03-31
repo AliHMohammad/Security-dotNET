@@ -9,6 +9,5 @@ namespace Security_CSharp.Security.Interfaces
         Task<User?> GetUserByEmail(string email);
         Task<User> CreateUser(User user);
         Task DeleteUser(User user);
-        Task SaveChanges();
     }
 }

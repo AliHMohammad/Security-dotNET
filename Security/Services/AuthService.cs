@@ -23,9 +23,9 @@ namespace Security_CSharp.Security.Services
 
         public AuthService(IUserRepository userRepository, IConfiguration configuration, IRoleRepository roleRepository)
         {
-            this._userRepository = userRepository;
-            this._configuration = configuration;
-            this._roleRepository = roleRepository;
+            _userRepository = userRepository;
+            _configuration = configuration;
+            _roleRepository = roleRepository;
         }
 
         public async Task<UserResponse> register(SignupRequest request)

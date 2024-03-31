@@ -1,4 +1,5 @@
-﻿using Security_CSharp.Exceptions;
+﻿using Security_CSharp.Data;
+using Security_CSharp.Exceptions;
 using Security_CSharp.Security.DTOs;
 using Security_CSharp.Security.Interfaces;
 using Security_CSharp.Security.Mappers;
@@ -11,12 +12,14 @@ namespace Security_CSharp.Security.Services
 
         private readonly IUserRepository _userRepository;
         private readonly IRoleRepository _roleRepository;
+        private readonly IUnitOfWork _unitOfWork;
 
 
-        public UserService(IUserRepository userRepository, IRoleRepository roleRepository)
+        public UserService(IUserRepository userRepository, IRoleRepository roleRepository, IUnitOfWork unitOfWork)
         {
-            this._userRepository = userRepository;
-            this._roleRepository = roleRepository;
+            _userRepository = userRepository;
+            _roleRepository = roleRepository;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<UserResponse> AddRole(string username, string role)
@@ -25,7 +28,7 @@ namespace Security_CSharp.Security.Services
             var roleDb = await _roleRepository.GetRoleByName(role) ?? throw new NotFoundException($"Could not find role by given name: {role}");
 
             userDb.Roles.Add(roleDb);
-            await _userRepository.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
 
             return userDb.ToDTOUser();
         }
@@ -36,7 +39,7 @@ namespace Security_CSharp.Security.Services
             var roleDb = await _roleRepository.GetRoleByName(role) ?? throw new NotFoundException($"Could not find role by given name: {role}");
 
             userDb.Roles.Remove(roleDb);
-            await _userRepository.SaveChanges();
+            await _unitOfWork.SaveChangesAsync();
 
             return userDb.ToDTOUser();
         }

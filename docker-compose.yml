@@ -14,8 +14,6 @@ services:
         - ConnectionStrings__default=server=products.database;port=3306;database=security_db;userid=root;password=ali120900
         - AppSettings__TokenSecret=31ad84457c906f687ef959ad5b9011c674aff6ed17b026294adc6d19fb8fb0d8
         - AppSettings__AdminPassword=ali120900
-    networks:
-        - network1
     depends_on: 
         - products.database
 
@@ -29,13 +27,7 @@ services:
         - "3310:3306"
     volumes:
         - SECURITY:/var/lib/mysql
-    networks:
-        - network1
 
 volumes:
   SECURITY:
   
-networks:
-    network1:
-        driver: bridge
-

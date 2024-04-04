@@ -1,0 +1,39 @@
+version: '3.4'
+
+services:
+  api:
+    image: ${DOCKER_REGISTRY-}productsapi
+    container_name: api
+    build:
+        context: .
+        dockerfile: Dockerfile
+    ports:
+        - "8080:8080"
+        - "8081:8081"
+    environment:
+        - ConnectionStrings__default=server=database;port=3306;database=security_db;userid=root;password=$MYSQL_ROOT_PASSWORD
+        - AppSettings__TokenSecret=$SECRET_STRING
+    depends_on: 
+        database:
+            condition: service_healthy
+
+  database:
+    image: mysql:latest
+    container_name: database
+    environment:
+        - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
+        - MYSQL_DATABASE=security_db
+    ports:
+        - "3310:3306"
+    volumes:
+    - SECURITY:/var/lib/mysql
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
+
+volumes:
+    SECURITY:
+
+
+  

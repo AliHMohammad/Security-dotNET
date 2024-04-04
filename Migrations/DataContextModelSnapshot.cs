@@ -72,7 +72,8 @@ namespace Security_CSharp.Migrations
                         .HasColumnName("username");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
+                        .HasColumnType("datetime(6)")
+                        .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
@@ -97,10 +98,10 @@ namespace Security_CSharp.Migrations
                         new
                         {
                             Username = "Admin",
-                            CreatedAt = new DateTime(2024, 3, 31, 23, 51, 28, 811, DateTimeKind.Local).AddTicks(862),
+                            CreatedAt = new DateTime(2024, 4, 4, 15, 58, 34, 542, DateTimeKind.Local).AddTicks(3581),
                             Email = "admin@kea.dk",
-                            PasswordHash = new byte[] { 104, 150, 192, 42, 149, 165, 109, 242, 220, 225, 227, 195, 10, 63, 127, 9, 102, 100, 46, 155, 27, 153, 137, 108, 23, 255, 19, 143, 115, 211, 102, 125 },
-                            PasswordSalt = new byte[] { 150, 55, 9, 229, 163, 127, 81, 230, 230, 198, 107, 114, 191, 247, 18, 107, 49, 226, 149, 36, 118, 14, 251, 175, 37, 255, 199, 114, 61, 15, 202, 132, 87, 105, 203, 4, 0, 152, 141, 215, 69, 65, 178, 180, 223, 15, 0, 124, 228, 41, 11, 52, 85, 181, 73, 187, 109, 180, 160, 40, 190, 26, 27, 169 }
+                            PasswordHash = new byte[] { 78, 72, 186, 162, 176, 236, 70, 178, 30, 17, 146, 142, 40, 251, 167, 16, 208, 129, 36, 248, 87, 55, 26, 220, 89, 62, 89, 162, 131, 65, 42, 245 },
+                            PasswordSalt = new byte[] { 115, 46, 131, 247, 224, 248, 116, 196, 202, 119, 38, 38, 252, 39, 235, 244, 98, 111, 106, 159, 175, 79, 227, 94, 179, 139, 242, 45, 81, 210, 215, 205, 181, 180, 170, 144, 146, 84, 97, 71, 174, 138, 24, 105, 18, 214, 40, 242, 139, 72, 147, 18, 73, 181, 162, 41, 164, 159, 123, 20, 56, 191, 99, 112 }
                         });
                 });
 

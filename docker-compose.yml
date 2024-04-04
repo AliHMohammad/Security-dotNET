@@ -15,7 +15,8 @@ services:
         - AppSettings__TokenSecret=31ad84457c906f687ef959ad5b9011c674aff6ed17b026294adc6d19fb8fb0d8
         - AppSettings__AdminPassword=flora110601
     depends_on: 
-        - products.database
+        products.database:
+            condition: service_healthy
 
   products.database:
     image: mysql:latest
@@ -26,8 +27,14 @@ services:
     ports:
         - "3310:3306"
     volumes:
-        - SECURITY:/var/lib/mysql
+    - SECURITY:/var/lib/mysql
+    healthcheck:
+        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
+        timeout: 20s
+        retries: 10
 
 volumes:
-  SECURITY:
+    SECURITY:
+
+
   

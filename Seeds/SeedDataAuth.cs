@@ -14,8 +14,9 @@ namespace Security_CSharp.Seeds
             var adminUsername = "Admin";
             var adminEmail = "admin@kea.dk";
             // Admin password is saved in user secrets
+            // If not set, default to value "admin"
             var adminPassword = configuration.GetSection("AppSettings:AdminPassword").Value
-                ?? throw new Exception("AdminPassword is not set in user secrets.");
+                ?? "admin";
 
 
             // Create Roles
@@ -24,7 +25,7 @@ namespace Security_CSharp.Seeds
             modelBuilder.Entity<Role>().HasData(ADMIN, USER);
 
 
-            // Remove Create Admin and je.HasData(..), if you dont wish to have an admin-user on startup
+            // Remove Create Admin and je.HasData(..), if you do not wish to have an admin-user on startup
 
             // Create Admin
             using var hmac = new HMACSHA256();

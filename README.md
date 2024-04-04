@@ -49,10 +49,16 @@ Set __TokenSecret__. It must be atleast 16 characters in length. You can easily 
 dotnet user-secrets set "AppSettings:TokenSecret" "SECRET_STRING"
 ```
 
-Set __AdminPassword__ : No requirements are set, but choose one wisely! :)
+Set __AdminPassword__ : No requirements are set, but choose one wisely! :). The default username for admin is `admin`
 
 ```
 dotnet user-secrets set "AppSettings:AdminPassword" "ADMIN_PASSWORD"
+```
+
+#### 3. Build a migration
+
+```
+dotnet ef migrations add {NAME_OF_YOUR_CHOOSING}
 ```
 
 
@@ -63,6 +69,49 @@ dotnet user-secrets set "AppSettings:AdminPassword" "ADMIN_PASSWORD"
 dotnet run 
 ```
 
+
+
+
+
+## Docker
+
+The following are the admin-credentials for your docker-container:
+
+```
+username: Admin
+password: admin
+```
+
+If you wish to change the password, set the user-secret for `AppSettings:AdminPassword` and build a new migration before 4. Boot it up. See the steps above in the Installation section.
+
+#### Prerequisites:
+
+* [Docker Desktop](https://www.docker.com/products/docker-desktop/)
+
+#### 1. Clone the repository:
+
+```
+git clone https://github.com/AliHMohammad/Security-CSharp.git .
+```
+
+#### 2. Create an .env file in project root:
+
+```
+touch .env
+```
+
+#### 3. Populate the .env with the following:
+
+```
+MYSQL_ROOT_PASSWORD=(MYSQL root password)
+SECRET_STRING=(Secret string used in the hash algorithm)
+```
+
+#### 4. Boot it up
+
+```
+docker compose up -d
+```
 
 ## Documentation
 

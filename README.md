@@ -20,7 +20,7 @@ Created By [AliHMohammad](https://github.com/AliHMohammad)
 #### 1. Clone the repository:
 
 ```
-git clone https://github.com/AliHMohammad/Security-CSharp.git .
+git clone https://github.com/AliHMohammad/Security-dotNET.git .
 ```
 
 #### 2. Set user secrets:
@@ -91,7 +91,7 @@ If you wish to change the password, set the user-secret for `AppSettings:AdminPa
 #### 1. Clone the repository:
 
 ```
-git clone https://github.com/AliHMohammad/Security-CSharp.git .
+git clone https://github.com/AliHMohammad/Security-dotNET.git .
 ```
 
 #### 2. Create an .env file in project root:

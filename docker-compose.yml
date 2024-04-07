@@ -1,7 +1,7 @@
 version: '3.4'
 
 services:
-  api:
+  product.api:
     image: ${DOCKER_REGISTRY-}productsapi
     container_name: api
     build:
@@ -11,29 +11,31 @@ services:
         - "8080:8080"
         - "8081:8081"
     environment:
-        - ConnectionStrings__default=server=database;port=3306;database=security_db;userid=root;password=$MYSQL_ROOT_PASSWORD
+        - ConnectionStrings__default=server=product.db;database=security_db;user id=SA;password=$MSSQL_SA_PASSWORD;TrustServerCertificate=true;
         - AppSettings__TokenSecret=$SECRET_STRING
     depends_on: 
-        database:
+        product.db:
             condition: service_healthy
 
-  database:
-    image: mysql:latest
+
+  product.db:
+    image: mcr.microsoft.com/mssql/server:latest
+    restart: unless-stopped
     container_name: database
+    env_file: .env
     environment:
-        - MYSQL_ROOT_PASSWORD=$MYSQL_ROOT_PASSWORD
-        - MYSQL_DATABASE=security_db
+        - ACCEPT_EULA=Y
+        - SA_PASSWORD=$MSSQL_SA_PASSWORD
     ports:
-        - "3310:3306"
+        - "1440:1433"
     volumes:
-    - SECURITY:/var/lib/mysql
+        - MSSQL_SECURITY:/var/opt/mssql
     healthcheck:
-        test: ["CMD", "mysqladmin" ,"ping", "-h", "localhost"]
-        timeout: 20s
+        test: /opt/mssql-tools/bin/sqlcmd -S localhost -U sa -P $MSSQL_SA_PASSWORD -Q "SELECT 1" || exit 1
+        interval: 10s
+        timeout: 3s
         retries: 10
+        start_period: 10s
 
 volumes:
-    SECURITY:
-
-
-  
+    MSSQL_SECURITY:

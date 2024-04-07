@@ -80,11 +80,11 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
 
 
 // Database
-var connectionString = builder.Configuration.GetConnectionString("default") ?? throw new Exception("\"default\" connectionString is not set.");
-var serverVersion = ServerVersion.AutoDetect(connectionString);
+var connectionString = builder.Configuration.GetConnectionString("default")
+    ?? throw new Exception("\"default\" connectionString is not set.");
 builder.Services.AddDbContext<DataContext>(options =>
 {
-    options.UseMySql(connectionString, serverVersion)
+    options.UseSqlServer(connectionString)
     // Only for development. Delete when deploying.
     .LogTo(Console.WriteLine, LogLevel.Information)
     .EnableSensitiveDataLogging()

@@ -12,8 +12,8 @@ using Security_CSharp.Data;
 namespace Security_CSharp.Migrations
 {
     [DbContext(typeof(DataContext))]
-    [Migration("20240404181204_authinit")]
-    partial class authinit
+    [Migration("20240407202138_mssqlinit")]
+    partial class mssqlinit
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -21,17 +21,17 @@ namespace Security_CSharp.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("ProductVersion", "8.0.3")
-                .HasAnnotation("Relational:MaxIdentifierLength", 64);
+                .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
-            MySqlModelBuilderExtensions.AutoIncrementColumns(modelBuilder);
+            SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.Property<string>("user_username")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.Property<string>("role_name")
-                        .HasColumnType("varchar(255)");
+                        .HasColumnType("nvarchar(450)");
 
                     b.HasKey("user_username", "role_name");
 
@@ -50,7 +50,7 @@ namespace Security_CSharp.Migrations
             modelBuilder.Entity("Security_CSharp.Security.Entitites.Role", b =>
                 {
                     b.Property<string>("Name")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("name");
 
                     b.HasKey("Name");
@@ -71,26 +71,26 @@ namespace Security_CSharp.Migrations
             modelBuilder.Entity("Security_CSharp.Security.Entitites.User", b =>
                 {
                     b.Property<string>("Username")
-                        .HasColumnType("varchar(255)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("username");
 
                     b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)")
+                        .HasColumnType("datetime2")
                         .HasColumnName("created_at");
 
                     b.Property<string>("Email")
                         .IsRequired()
-                        .HasColumnType("longtext")
+                        .HasColumnType("nvarchar(max)")
                         .HasColumnName("email");
 
                     b.Property<byte[]>("PasswordHash")
                         .IsRequired()
-                        .HasColumnType("longblob")
+                        .HasColumnType("varbinary(max)")
                         .HasColumnName("password_hash");
 
                     b.Property<byte[]>("PasswordSalt")
                         .IsRequired()
-                        .HasColumnType("longblob")
+                        .HasColumnType("varbinary(max)")
                         .HasColumnName("password_salt");
 
                     b.HasKey("Username");
@@ -101,10 +101,10 @@ namespace Security_CSharp.Migrations
                         new
                         {
                             Username = "Admin",
-                            CreatedAt = new DateTime(2024, 4, 4, 20, 12, 4, 154, DateTimeKind.Local).AddTicks(8898),
+                            CreatedAt = new DateTime(2024, 4, 7, 22, 21, 38, 162, DateTimeKind.Local).AddTicks(5091),
                             Email = "admin@kea.dk",
-                            PasswordHash = new byte[] { 141, 72, 190, 234, 166, 32, 160, 162, 174, 119, 49, 201, 81, 197, 20, 63, 102, 205, 196, 125, 172, 65, 169, 211, 39, 37, 36, 178, 172, 73, 197, 58 },
-                            PasswordSalt = new byte[] { 34, 74, 239, 73, 39, 105, 55, 216, 133, 152, 158, 211, 45, 102, 13, 232, 39, 218, 143, 94, 193, 131, 13, 175, 98, 172, 33, 130, 209, 43, 155, 114, 20, 68, 183, 253, 48, 121, 98, 47, 120, 38, 159, 188, 251, 98, 195, 73, 180, 150, 94, 135, 136, 23, 26, 45, 168, 75, 52, 138, 174, 142, 188, 5 }
+                            PasswordHash = new byte[] { 68, 207, 141, 99, 35, 158, 219, 51, 223, 218, 149, 32, 244, 186, 208, 103, 160, 66, 196, 145, 23, 27, 176, 80, 96, 236, 84, 24, 132, 224, 82, 25 },
+                            PasswordSalt = new byte[] { 140, 47, 214, 69, 227, 201, 230, 182, 208, 214, 236, 134, 52, 251, 100, 116, 67, 32, 187, 61, 173, 120, 41, 249, 142, 253, 2, 235, 191, 181, 167, 29, 191, 65, 194, 77, 230, 135, 112, 232, 252, 28, 135, 156, 243, 197, 220, 157, 146, 240, 76, 61, 122, 63, 150, 109, 15, 252, 33, 37, 135, 102, 159, 24 }
                         });
                 });
 

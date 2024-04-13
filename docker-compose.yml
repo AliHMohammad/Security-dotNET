@@ -1,8 +1,10 @@
 version: '3.4'
 
+#image: ${DOCKER_REGISTRY-}productsapi
+
 services:
   api:
-    image: ${DOCKER_REGISTRY-}productsapi
+    image: alihmohammad/securityapi:mysql
     container_name: api
     build:
         context: .

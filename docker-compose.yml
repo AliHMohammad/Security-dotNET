@@ -2,7 +2,7 @@ version: '3.4'
 
 services:
   product.api:
-    image: ${DOCKER_REGISTRY-}productsapi
+    image: alihmohammad/securityapi:1.0
     container_name: api
     build:
         context: .

@@ -103,11 +103,13 @@ touch .env
 #### 3. Populate the .env with the following:
 
 ```
-MYSQL_ROOT_PASSWORD=(MYSQL root password)
+MSSQL_SA_PASSWORD=(MSSQL sa password. Must contain atleast one uppercase letter)
 SECRET_STRING=(Secret string used in the hash algorithm)
 ```
 
 #### 4. Boot it up
+
+The docker-compose.yml pulls the api docker image from the docker hub and builds the container.
 
 ```
 docker compose up -d

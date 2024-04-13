@@ -1,5 +1,7 @@
 version: '3.4'
 
+#image: ${DOCKER_REGISTRY-}productsapi
+
 services:
   product.api:
     image: alihmohammad/securityapi:1.0

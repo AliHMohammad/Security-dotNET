@@ -109,6 +109,8 @@ SECRET_STRING=(Secret string used in the hash algorithm)
 
 #### 4. Boot it up
 
+The docker-compose.yml pulls the api docker image from the docker hub and builds the container.
+
 ```
 docker compose up -d
 ```
